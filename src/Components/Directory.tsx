@@ -6,14 +6,13 @@ export interface DirectoryProps {
     name: string;
     parent_id: string;
     deep: number,
-    visibility: boolean,
+    visibility?: boolean,
 }
 
 const Directory = ({id, name, parent_id, deep, visibility}: DirectoryProps) => {
     const {visibilityToggle} = useContext(Context);
     if (deep > 3) { deep = 3; }
     const visibilityClass = visibility ? "" : "non-visible";
-    useEffect(() => console.log(visibility))
     return (
         <ul>
             <li onClick={() => visibilityToggle(id, parent_id)}
