@@ -1,0 +1,23 @@
+li{
+  text-align: left;
+}
+
+.item-1{
+ margin-left: 10px;
+}
+
+.item-2{
+  margin-left: 20px;
+}
+
+.item-3{
+    margin-left: 40px;
+}
+
+.invisible{
+  display: none;
+}
+
+.non-visible{
+    display: none;
+}
