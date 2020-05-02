@@ -6,11 +6,6 @@
       "parent_id": "null"
     },
     {
-      "id": "5e25774a63bf7",
-      "name": "app",
-      "parent_id": "5e257721961a1"
-    },
-    {
       "id": "5e257770389a7",
       "name": "src",
       "parent_id": "5e25774a63bf7"

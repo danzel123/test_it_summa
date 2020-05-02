@@ -42,6 +42,9 @@ export default (state= initialState, action) => {
             deeps: action.payload};
 
         }
+    case "DEL_DIR":{
+
+    }
     default:
       return state;
   }

@@ -1,23 +1,26 @@
-import React, {useState, useContext, useEffect} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../context";
 
 export interface DirectoryProps {
     id: string;
     name: string;
     parent_id: string;
-    deep: number,
-    visibility?: boolean,
+    deep: number;
+    visibility?: boolean;
 }
 
 const Directory = ({id, name, parent_id, deep, visibility}: DirectoryProps) => {
-    const {visibilityToggle} = useContext(Context);
+
+    const {visibilityToggle, showPopup} = useContext(Context);
     if (deep > 3) { deep = 3; }
     const visibilityClass = visibility ? "" : "non-visible";
     return (
-        <ul>
+      <div className={`item-${deep} ${visibilityClass}`}>
             <li onClick={() => visibilityToggle(id, parent_id)}
-                className={`item-${deep} ${visibilityClass}`}>{id}, {name}, {parent_id}</li>
-        </ul>
+                className={``}>{id}, {name}, {parent_id}
+           </li>
+          <button onClick={() => showPopup({id, name, parent_id})}>Х</button>
+          </div>
     );
 };
 
