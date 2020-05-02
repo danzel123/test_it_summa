@@ -20,6 +20,7 @@ const Manager: React.FC = () => {
         deeps: {},
         banned: new Set()});
     const [popup, setPopup] = useState({visible: false, id: ""});
+
     function setDeeps(dirs: IDirectory[]) {
         const deeps = {[dirs[0].id]: 0};
         for (let i: number = 1; i < dirs.length; i++) {
@@ -31,6 +32,7 @@ const Manager: React.FC = () => {
 
         return dispatch({type: "SET_DEEPS", payload: deeps});
     }
+
     function updateDirs() {
         axios.get ("http://localhost:3050/rooms")
             .then((response) => response.data.dir)
@@ -38,6 +40,7 @@ const Manager: React.FC = () => {
             .then((dirs) => setDeeps(dirs));
         dispatch({type: "LOAD_DIRS", payload: []});
     }
+
     // @ts-ignore
     useEffect(() => {
         updateDirs();
@@ -78,6 +81,7 @@ const Manager: React.FC = () => {
         setPopup({visible: false, id: ""});
     };
     const delDir = (id: string) => {
+        console.log(`http://localhost:3050/dir/${id}`);
         axios.delete(`http://localhost:3050/dir/${id}`, {})
             .then((res) =>  updateDirs());
 

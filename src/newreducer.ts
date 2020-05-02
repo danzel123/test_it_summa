@@ -21,6 +21,7 @@ export default (state= initialState, action) => {
   switch (action.type) {
     case "LOAD_DIRS": {
       let newDir: IDirectory[] = [].concat(action.payload);
+      console.log(action.payload)
       for(let i = 0; i < newDir.length; i++){
         newDir[i].visibility = true;
       }
