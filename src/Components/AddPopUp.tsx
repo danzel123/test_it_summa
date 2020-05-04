@@ -31,16 +31,19 @@ const AddPopUp: React.FC<IDelPopUp> = ({id}) => {
         }
     };
     return(
-        <div>
             <form onSubmit={add}>
-                <h2>Добавить в директорию {parentName}</h2>
-                <input type="text" value={newDirectory.name}
-                       ref={inputEl} onChange={(val) =>
-                    setNewDirectory({...newDirectory, name: val.target.value})}/>
-                <button type="submit">ОК</button>
-                <button onClick={() =>  closePopUp(dispatch)}>Закрыть</button>
+                <h2>Добавить новую папку</h2>
+                <h3>в директорию {parentName}</h3>
+                <div className={"interactive-box"}>
+                    <label htmlFor="">Имя<input name="name" type="text" value={newDirectory.name}
+                           ref={inputEl} onChange={(val) =>
+                        setNewDirectory({...newDirectory, name: val.target.value})}/></label>
+                    <div className="but-box">
+                    <button type="submit">ОК</button>
+                    <button onClick={() =>  closePopUp(dispatch)}>Закрыть</button>
+                    </div>
+                </div>
             </form>
-        </div>
     );
 };
 

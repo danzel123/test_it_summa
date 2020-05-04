@@ -8,9 +8,12 @@ const MainPopUp: React.FC = () => {
     const dispatch = direcoryState!.dispatch;
     const state = direcoryState!.state;
     return(
-        <div className={"PopUp"}>
-            {state.popup.content}
-        </div>
+        <>
+            {state.popup.isOpen ? <div className={"popup"}>
+                {state.popup.content}
+            </div> : null}
+
+        </>
    );
 };
 
