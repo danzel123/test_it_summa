@@ -14,25 +14,20 @@ const Manager: React.FC = () => {
     const [ state, dispatch ] = useReducer(reducer, initialState);
     const [popup, setPopup] = useState({visible: false, id: ""});
 
-    // @ts-ignore
     useEffect(() => {
         loadData(dispatch);
     }, []);
     return (
         <DirectoryContext.Provider value={{state, dispatch}}>
-        <>{state.dirs.length ?
-            <ul>
+        <>
+            {state.dirs.length ?
+            <ul className={'dirs-list'}>
                 {state.dirs.map((item: IDirectory, i: number) =>
                     <Directory  key={i} {...item} deep={state.deeps[item.id]}/>)}
             </ul>
             :
             null
         }
-            {popup.visible ?
-                <DelPopup id={popup.id}/>
-                :
-                null}
-        {/*        DelPopUp ChangePopUp AddPopUp ErrorPopUp*/}
         <MainPopUp/>
         </>
         </DirectoryContext.Provider>

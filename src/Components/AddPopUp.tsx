@@ -1,6 +1,7 @@
 import React, {FC, useContext, useEffect, useRef, useState} from "react";
-import {addPopUp, closePopUp, delDir} from "../actions/actions";
+import {addDir, closePopUp, delDir, showPopUp} from "../actions/actions";
 import DirectoryContext from "../contexts/DirectoryContext";
+import ErrorPopUp from "./ErrorPopUp";
 
 interface IDelPopUp {
     id: string;
@@ -16,27 +17,28 @@ const AddPopUp: React.FC<IDelPopUp> = ({id}) => {
         parent_id: id,
     });
     useEffect( () => {setNewDirectory({...newDirectory, parent_id: id}); }, []);
-
-    console.log(newDirectory.parent_id);
     const inputEl = useRef<HTMLInputElement>(null);
-    const addDir = (event: React.FormEvent<HTMLFormElement>) => {
+    const parentName = state.dirs.filter((el) => el.id === newDirectory.parent_id)[0].name;
+    const add = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (state.dirs.filter((el) => el.name === newDirectory.name && el.parent_id === newDirectory.parent_id).length) {
-            console.log(state.dirs.filter((el) => el.name === newDirectory.name && el.parent_id === newDirectory.parent_id))
-            alert("такой уже есть");
+        if (state.dirs.filter((el) =>
+            el.name === newDirectory.name && el.parent_id === newDirectory.parent_id).length !== 0) {
+            const err = `Элемент с таким именем уже существует в директории ${parentName}`;
+            showPopUp(dispatch, <ErrorPopUp text = {err}/>);
         } else {
-            addPopUp(dispatch, newDirectory);
+            addDir(dispatch, newDirectory);
             closePopUp(dispatch);
         }
     };
     return(
         <div>
-            <form onSubmit={addDir}>
-                <h2>Добавить в директорию {id}</h2>
+            <form onSubmit={add}>
+                <h2>Добавить в директорию {parentName}</h2>
                 <input type="text" value={newDirectory.name}
                        ref={inputEl} onChange={(val) =>
                     setNewDirectory({...newDirectory, name: val.target.value})}/>
                 <button type="submit">ОК</button>
+                <button onClick={() =>  closePopUp(dispatch)}>Закрыть</button>
             </form>
         </div>
     );

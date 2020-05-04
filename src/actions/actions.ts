@@ -10,9 +10,12 @@ export type ActionType =
     | {type: "DEL_DIR", payload: string}
     | {type: "CLOSE_POPUP"}
     | {type: "ADD_DIR", payload: IDirectory}
-    | {type: "SHOW_POPUP", payload: React.ReactNode};
+    | {type: "SHOW_POPUP", payload: React.ReactNode}
+    | {type: "PATCH_DIR", payload: React.ReactNode};
 
+// Загрузка директорий
 export const loadData = (dispatch: React.Dispatch<ActionType>) => {
+    // устанавливает всем дир-ям видимость тру
     function setVisibility(dirs: IDirectory[]) {
         const newDir: IDirectory[] = dirs;
         for (let i = 0; i < newDir.length; i++) {
@@ -20,6 +23,7 @@ export const loadData = (dispatch: React.Dispatch<ActionType>) => {
         }
         return newDir;
     }
+    // Вычисление глубин директорий, возвращает массив глубин
     function setDeeps(dirs: IDirectory[]) {
         const deeps = {[dirs[0].id]: 0};
         for (let i: number = 1; i < dirs.length; i++) {
@@ -31,6 +35,7 @@ export const loadData = (dispatch: React.Dispatch<ActionType>) => {
 
         return dispatch({type: "SET_DEEPS", payload: deeps});
     }
+    // Загрузка ...
     axios.get (`${process.env.REACT_APP_API_HOST}/dir`)
         .then((response) => response.data.dir)
         .then((res) => setVisibility(res))
@@ -38,6 +43,7 @@ export const loadData = (dispatch: React.Dispatch<ActionType>) => {
         .then((dirs) => setDeeps(dirs));
 };
 
+// Вычисление предков, которых необходимо скрыть вместе с родителем
 export const visibilityDir = (dispatch: React.Dispatch<ActionType>, id: string, state: any) => {
     const banedName = state.banned;
     const box: IDirectory[] = state.dirs;
@@ -77,8 +83,13 @@ export const showPopUp = (dispatch: React.Dispatch<ActionType>, content: React.R
     dispatch({type: "SHOW_POPUP", payload: content});
 };
 
-export const addPopUp = (dispatch: React.Dispatch<ActionType>, dir: IDirectory) => {
-    console.log("до сжда");
+export const addDir = (dispatch: React.Dispatch<ActionType>, dir: IDirectory) => {
     axios.post(`${process.env.REACT_APP_API_HOST}/dir`, dir).then((res) => loadData(dispatch));
     dispatch({type: "ADD_DIR", payload: dir});
 };
+
+export const changeDir = (dispatch: React.Dispatch<ActionType>, dir: IDirectory) => {
+    axios.patch(`${process.env.REACT_APP_API_HOST}/dir/${dir.id}`, {name: dir.name, parent_id: dir.parent_id}).then((res) => loadData(dispatch));
+    dispatch({type: "PATCH_DIR", payload: dir});
+};
+

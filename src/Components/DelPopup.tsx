@@ -10,7 +10,6 @@ const DelPopup: React.FC<IDelPopUp> = ({id}) => {
     const direcoryState = useContext(DirectoryContext);
     const dispatch = direcoryState!.dispatch;
     const state = direcoryState!.state;
-    console.log(state)
     return(
         <div>
             <h2>Удалить?</h2>
