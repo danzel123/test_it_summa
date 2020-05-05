@@ -16,7 +16,7 @@ const AddPopUp: React.FC<IDelPopUp> = ({id}) => {
         id: new Date().getTime().toString(),
         parent_id: id,
     });
-    useEffect( () => {setNewDirectory({...newDirectory, parent_id: id}); }, []);
+    useEffect( () => {setNewDirectory({...newDirectory, parent_id: id}); }, [id]);
     const inputEl = useRef<HTMLInputElement>(null);
     const parentName = state.dirs.filter((el) => el.id === newDirectory.parent_id)[0].name;
     const add = (event: React.FormEvent<HTMLFormElement>) => {
@@ -31,15 +31,16 @@ const AddPopUp: React.FC<IDelPopUp> = ({id}) => {
         }
     };
     return(
-            <form onSubmit={add}>
+            <form onSubmit={add} className={'add-form'}>
                 <h2>Добавить новую папку</h2>
-                <h3>в директорию {parentName}</h3>
+                <p>в директорию {parentName}</p>
                 <div className={"interactive-box"}>
                     <label htmlFor="">Имя<input name="name" type="text" value={newDirectory.name}
                            ref={inputEl} onChange={(val) =>
-                        setNewDirectory({...newDirectory, name: val.target.value})}/></label>
-                    <div className="but-box">
-                    <button type="submit">ОК</button>
+                        setNewDirectory({...newDirectory, name: val.target.value})}
+                                                placeholder={'Введите новое название папки'}/></label>
+                    <div className={'buttons-group'}>
+                    <button disabled={newDirectory.name === '' } type="submit">ОК</button>
                     <button onClick={() =>  closePopUp(dispatch)}>Закрыть</button>
                     </div>
                 </div>

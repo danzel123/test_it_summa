@@ -11,7 +11,7 @@ const ErrorPopUp: React.FC<IErrorPopUp> = ({text}) => {
     const dispatch = direcoryState!.dispatch;
     const state = direcoryState!.state;
     return(
-        <div>
+        <div className={"error-popup"}>
            <h2>Ошибка</h2>
             <p>{text}</p>
             <button onClick={() => closePopUp(dispatch)}>ОК</button>

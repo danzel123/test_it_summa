@@ -1,12 +1,13 @@
-import axios from "axios";
+import {ActionType} from "../actions/actions";
 import {IDirectory, IState} from "../types";
 
-// @ts-ignore
-export default (state: IState, action) => {
+export default (state: IState, action: ActionType) => {
   switch (action.type) {
     case "LOAD_DIRS": {
       return {...state,
-      dirs: action.payload, isLoading: false};
+      dirs: action.payload.dirs, isLoading: false,
+        deeps: action.payload.deeps,
+        parents: action.payload.parents};
 
     }
     case "SET_BANNED": {
@@ -18,11 +19,6 @@ export default (state: IState, action) => {
     case "SET_LOADING":
       return {...state,
         isLoading: action.payload};
-    case "SET_DEEPS": {
-          return {...state,
-            deeps: action.payload};
-
-        }
     case "CLOSE_POPUP": {
       return {...state,
       popup: {isOpen: false, content: ""}};

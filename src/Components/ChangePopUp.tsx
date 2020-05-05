@@ -14,10 +14,11 @@ const ChangePopUp: React.FC<IChangePopUp> = ({id, name, parent_id}) => {
     const dispatch = direcoryState!.dispatch;
     const state = direcoryState!.state;
     const [modDir, setmodDir] = useState({
-        name: name,
-        id: id,
-        parent_id: parent_id,
+        name,
+        id,
+        parent_id,
     });
+    useEffect( () => {setmodDir({...modDir, parent_id, name, id}); }, [id]);
     const inputEl = useRef<HTMLInputElement>(null);
     const change = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -25,17 +26,20 @@ const ChangePopUp: React.FC<IChangePopUp> = ({id, name, parent_id}) => {
         closePopUp(dispatch);
     };
     return(
-        <div>
-            <form onSubmit={change}>
-                <h2>Изменить директорию{name}</h2>
-                <label htmlFor="name">Имя директории</label>
-                <input type="text" name= 'name' value={modDir.name}
-                       ref={inputEl} onChange={(val) =>
-                    setmodDir({...modDir, name: val.target.value})}/>
-                <button type="submit">ОК</button>
-                <button onClick={() =>  closePopUp(dispatch)}>Закрыть</button>
+            <form onSubmit={change} className={"change-form"}>
+                <h2>Изменить директорию </h2>
+                <p>{name}</p>
+                <div className={"interactive-box"}>
+                    <label htmlFor="name">Имя
+                    <input type="text" name= "name" value={modDir.name}
+                           ref={inputEl} onChange={(val) =>
+                        setmodDir({...modDir, name: val.target.value})}/></label>
+                    <div className={"buttons-group"}>
+                        <button disabled={modDir.name === "" } type="submit">ОК</button>
+                        <button onClick={() =>  closePopUp(dispatch)}>Закрыть</button>
+                        </div>
+                    </div>
             </form>
-        </div>
     );
 };
 

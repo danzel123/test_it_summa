@@ -17,10 +17,11 @@ export interface IState {
     dirs: IDirectory[];
     isLoading: boolean;
     deeps: {[key: string]: number};
-    banned: Set<string>;
+    banned: Set<string|unknown>;
+    parents: {[key: string]: string[]};
     popup: {
         isOpen: boolean;
         content?: React.ReactNode;
-    }
+    };
 }
 

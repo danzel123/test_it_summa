@@ -12,7 +12,6 @@ import MainPopUp from "./MainPopUp";
 const Manager: React.FC = () => {
     const initialState = useContext(DataContext);
     const [ state, dispatch ] = useReducer(reducer, initialState);
-    const [popup, setPopup] = useState({visible: false, id: ""});
 
     useEffect(() => {
         loadData(dispatch);
@@ -21,7 +20,7 @@ const Manager: React.FC = () => {
         <DirectoryContext.Provider value={{state, dispatch}}>
         <>
             {state.dirs.length ?
-            <ul className={'dirs-list'}>
+            <ul className={"dirs-list"}>
                 {state.dirs.map((item: IDirectory, i: number) =>
                     <Directory  key={i} {...item} deep={state.deeps[item.id]}/>)}
             </ul>

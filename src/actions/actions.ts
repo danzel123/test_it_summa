@@ -1,12 +1,15 @@
 import axios from "axios";
 import React from "react";
 import {IDirectory, IState} from "../types";
-
+interface IPaylaodDirs {
+    deeps: {[key: string]: number};
+    parents: {[key: string]: string[]};
+    dirs: IDirectory[];
+}
 export type ActionType =
-    | {type: "LOAD_DIRS", payload: IDirectory[]}
+    | {type: "LOAD_DIRS", payload: IPaylaodDirs}
     | {type: "SET_BANNED", payload: Set<string>}
     | {type: "SET_LOADING", payload: boolean}
-    | {type: "SET_DEEPS", payload: {[key: string]: number}}
     | {type: "DEL_DIR", payload: string}
     | {type: "CLOSE_POPUP"}
     | {type: "ADD_DIR", payload: IDirectory}
@@ -32,15 +35,34 @@ export const loadData = (dispatch: React.Dispatch<ActionType>) => {
             }
             deeps[dirs[i].id] = deeps[dirs[i].parent_id] + 1;
         }
-
-        return dispatch({type: "SET_DEEPS", payload: deeps});
+        return deeps;
+    }
+    // Выичиление детей родителей
+    function setChilds(dirs: IDirectory[]) {
+        const res: {[k: string]: string[]} = {};
+        dirs.forEach((el) => {
+            res[el.id] = [];
+            dirs.forEach((child) => {
+                if (el.id === child.parent_id) {
+                    res[el.id].push(child.id);
+                }
+            });
+        });
+        console.log(res);
+        return res;
     }
     // Загрузка ...
     axios.get (`${process.env.REACT_APP_API_HOST}/dir`)
         .then((response) => response.data.dir)
         .then((res) => setVisibility(res))
-        .then((dirs) => {dispatch({type: "LOAD_DIRS", payload: dirs}); return dirs; })
-        .then((dirs) => setDeeps(dirs));
+        .then((dirs) => {
+            return {
+                dirs,
+                parents: setChilds(dirs),
+                deeps: setDeeps(dirs),
+            };
+        })
+        .then((res) => dispatch({type: "LOAD_DIRS", payload: res}));
 };
 
 // Вычисление предков, которых необходимо скрыть вместе с родителем
@@ -89,7 +111,7 @@ export const addDir = (dispatch: React.Dispatch<ActionType>, dir: IDirectory) =>
 };
 
 export const changeDir = (dispatch: React.Dispatch<ActionType>, dir: IDirectory) => {
-    axios.patch(`${process.env.REACT_APP_API_HOST}/dir/${dir.id}`, {name: dir.name, parent_id: dir.parent_id}).then((res) => loadData(dispatch));
+    axios.patch(`${process.env.REACT_APP_API_HOST}/dir/${dir.id}`,
+        {name: dir.name, parent_id: dir.parent_id}).then((res) => loadData(dispatch));
     dispatch({type: "PATCH_DIR", payload: dir});
 };
-
